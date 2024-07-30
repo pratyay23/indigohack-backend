@@ -12,12 +12,6 @@ Crispy Palm Tree is a real-time flight status and notification system designed t
 
 ## Technologies Used
 
-### Frontend
-
-- *HTML*
-- *CSS*
-- *React.js*: For building dynamic and interactive user interfaces.
-
 ### Backend
 
 - *Node.js*: Server-side runtime environment.
@@ -37,8 +31,8 @@ Crispy Palm Tree is a real-time flight status and notification system designed t
 
 1. *Clone the repository*:
    ```sh
-   git clone https://github.com/pratyay23/crispy-palm-tree.git
-   cd crispy-palm-tree
+   git clone https://github.com/pratyay23/indigohack-backend.git
+   cd indigohack-backend
 2. Install dependencies   
     ```sh
     npm install
