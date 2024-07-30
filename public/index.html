@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Status Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #flights {
+            margin-top: 20px;
+        }
+
+        .flight {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .flight strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Flight Status Dashboard</h1>
+    <div id="flights"></div>
+
+    <script>
+        // Create WebSocket connection
+        const socket = new WebSocket('ws://localhost:8080');
+
+        // Reference to the flights container
+        const flightsContainer = document.getElementById('flights');
+
+        // Event handler for WebSocket connection open
+        socket.onopen = () => {
+            console.log('Connected to WebSocket server');
+        };
+
+        // Event handler for receiving messages from WebSocket
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'statusChange') {
+                console.log(`Notification: ${data.message}`);
+                flightsContainer.innerHTML = '';
+                updateFlightStatus(data);
+            } else if (Array.isArray(data)) {
+                flightsContainer.innerHTML = ''; // Clear existing data
+                data.forEach(updateFlightStatus);
+            }
+        };
+
+        // Event handler for WebSocket connection close
+        socket.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Function to update flight status on the page
+        function updateFlightStatus(flight) {
+            const flightDiv = document.createElement('div');
+            flightDiv.classList.add('flight');
+            flightDiv.id = flight.flight_id;
+
+            flightDiv.innerHTML = `
+                <strong>Flight ID:</strong> ${flight.flight_id} <br>
+                <strong>Message:</strong> ${flight.message} <br>
+                <strong>New Status:</strong> ${flight.new_status} <br>
+                <strong>Old Status:</strong> ${flight.old_status} <br>
+                <hr>
+            `;
+
+            flightsContainer.appendChild(flightDiv);
+        }
+    </script>
+</body>
+
+</html>
